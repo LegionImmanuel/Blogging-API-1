@@ -1,10 +1,8 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const Schema = mongoose.Schema;
-ObjectId = Schema.ObjectId;
 
 const UserSchema = new Schema({
-    id: ObjectId,
     firstname: {
         type: String,
         // required: [true, "Input cannot be blank"],

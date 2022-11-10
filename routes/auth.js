@@ -36,6 +36,7 @@ authRouter.post(
                         // DO NOT STORE PASSWORDS IN THE JWT!
                         const token = jwt.sign({ user: body }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
+                        // res.json({ token, username: user.username, name: user.firstName })
                         return res.render('create')
                     }
                 );

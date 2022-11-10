@@ -1,43 +1,33 @@
+const { json } = require('body-parser');
 const express = require('express')
 const postRouter = express.Router();
 const mongoose = require('mongoose')
 const Post = require('../models/blogs');
+const articles = require('../models/users');
 
 
-//create post 
-// postRouter.post('/create', async (req,res)=> {
-// try {
-//     const savePost = await new Post(req.body);
-//     const savedPost = await savedPost.save()
-//     res.status(200).render('create_successful');
-
-// } catch (error) {
-//     res.status(500).json(error);
-// }
-// })
-
-//create post
-postRouter.post('/create', (req, res) => {
+// Create blogpost/article
+postRouter.post('/create', async (req, res, next) => {
   const title = req.body.title
   const description = req.body.description
   const author = req.body.author
   const body = req.body.body
-
   const blog = new Post({
       title: title,
       description: description,
       author: author,
       body: body
-
-  })
-
+  });
+  console.log(blog)
   blog.save(err => {
-      if(err) {  res.send(err); }
-      else { res.render('create_successful'); }
+    if(err) {  res.status(404).send(err); 
+
+    }else 
+      res.render('create_successful.ejs');
   });
 })
 
-//get All posts 
+//Get All Blogposts 
 postRouter.get('/blogs', async (req,res) => {
   try {
    const posts = await Post.find();
@@ -48,46 +38,135 @@ postRouter.get('/blogs', async (req,res) => {
   }
 })
 
+// postRouter.get('/:id', (req,res) =>{
+//   console.log(req.params.id);
+//   const id = mongoose.Types.ObjectId(req.params.id.trim());
+//   Post.findById(id)
+//   .then((result) =>{
+//       // res.render('details',{blog:result,title:'Blog Details'})
+//       console.log(result);
+//       res.status(201).send(result)
+//   })
+//   .catch((err) => {
+//       console.log(err);
+//       res.status(404).send(err)
+//   })
+// })
 
-//update post
-postRouter.put('blogs/update/:id', async (req,res)=> {
- try {
-    const post = await Post.findById(req.params.id);
-    if(post.userId === req.body.userId) {
-      await Post.updateOne({$set:req.body});
-     res.status(200).json('it has been updated');
-    } else {
-        res.status(403).json('you can only update your post');
-    }
- } catch (error) {
-     res.status(500).json(error)
- }
-});
+// Working Partially
+// postRouter.get('/:id', async ( req, res, next ) => {
+//   try {
+//     const id = req.params.id
+//     const post = await Post.findById(id)
+//     if (!post) {
+//     return res.status(404).json('Blogpost does not exist')
+//     }
+//     res.status(200).send(post)
+//   } 
+//   catch (e) {
+//     console.log(e)
+//     res.status(500).send( e )
+//   }
+// });
 
-//get one post 
-postRouter.get('blogs/:id',async(req,res)=> {
-  try {
-    const post = await Post.findById(req.params.id);
-    res.status(200).json(post);
-  } catch (error) {
-    res.status(500).json(error);
-  }
+// postRouter.get('/:id', (req, res))
+// var findBlogById = (id, done) => {
+//   Post.findById(id, (err, blogId) => {
+//     if (err) return console.log(err)
+//     res.status(404).send('Error');
+//     done(null, res.status(200).send(blogId));
+//   });
+// };
+
+// postRouter.get('/:id', (req, res, done) =>{
+// Post.findById(id, function (err, posts) {
+//     if (err) return console.log(err);
+//     done(null, posts);
+// });
+// })
+
+// postRouter.get('/:id', (req, res) => {
+//   const id = req.params.id
+//   Post.findById(id)
+//       .then((id) => {
+//           res.status(200).send({
+//             message: "BLOG POST",
+//             data: id
+//           })
+//       }).catch((err) => {
+//           console.log(err)
+//           res.status(404).send(err)
+//       })
+// });
+
+
+
+// postRouter.get('/:id', function(req, res) {
+//   const getById = (id) => Promise.resolve(users.find(u => u.id == id));
+
+//   Post.findById(req.params.id)
+//     .then(body => res.status(200).send(body))
+//     .catch(err => res.status(500).send(err));
+// });
+
+
+// // Get Blogpost By ID
+// postRouter.get('/:id', (req, res) => {
+//   const id = req.params.id
+//   Post.findById(id)
+//       .then(blogs => {
+//           res.status(200).send(blogs)
+//       }).catch(err => {
+//           console.log(err)
+//           res.status(404).send(err)
+//       })
+// })
+
+
+
+// postRouter.get('/:id', async(req,res)=> {
+//   try {
+//     const post = await Post.findById(req.params.id);
+//     res.status(200).json(post);
+//   } catch (error) {
+//     res.status(500).json(error);
+//   }
+// });
+
+
+// Update Blogpost 
+postRouter.put('/:id', (req, res) => {
+  const id = req.params.id
+  const blog = req.body
+  
+  Post.updatedAt = new Date() // set the lastUpdateAt to the current date
+  Post.findByIdAndUpdate(id, blog, { new: true })
+      .then(newBlog => {
+          res.status(200).send({
+            message: "Your blog post/article has been updated successfully",
+            data: newBlog
+          })
+      }).catch(err => {
+          console.log(err)
+          res.status(500).send(err)
+      })
 })
 
-//delete post 
-postRouter.delete('blogs/delete/:id', async (req, res)=> {
-  try {
-   const post =  await Post.findById(req.params.id);
-   if (post.userId === req.body.userId) {
-      await Post.delete()
-      res.status(200).json('the post is deleted')
-   } else {
-       res.status(403).json("you can only delete your post")
-   }
-  } catch (error) {
-    res.status(500).json(error)  
-  }
- });
+// Delete Blogpost By ID
+postRouter.delete('/:id', (req, res) => {
+  const id = req.params.id
+  Post.findByIdAndDelete(id)
+      .then(() => {
+          res.status(200).send({
+            message: "Your blog post has been deleted successfully",
+            data: ""
+          })
+      }).catch((err) => {
+          console.log(err)
+          res.status(401).send(err)
+      })
+});
+
 
 
 module.exports = postRouter;

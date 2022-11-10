@@ -5,14 +5,14 @@ const bodyParser = require('body-parser');
 const connectEnsureLogin = require('connect-ensure-login');
 const { connectToMongoDB } = require('./database');
 
-const UserModel = require ('./models/users');
-const BlogModel = require ('./models/blogs');
+require ('./models/users');
+require ('./models/blogs');
 
 const authRoute = require('./routes/auth');
 const postRoute = require('./routes/post');
 
 const HOST = 'localhost'
-const PORT = 7070;
+const PORT = 9017;
 const app = express();
 
 
@@ -25,16 +25,17 @@ require("./authentication/auth")
 
 //Middlewares
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use('/', authRoute);
-app.use('/', postRoute);
 app.use(express.json());
+app.use('/', authRoute);
+app.use('/',  postRoute);
+app.use('/create',  connectEnsureLogin.ensureLoggedIn());
 app.set('views', 'views');
 app.set('view engine', 'ejs');
 
 
 // renders the home page
 app.get('/', (req, res) => {
-    res.send('Welcome to the Blog Homepage');
+    res.render('home');
 });
 
 app.get('/signup', (req, res) => {
@@ -47,11 +48,6 @@ app.get('/login', (req, res) => {
 
 app.get('/create', (req, res) => {
     res.render('create');
-});
-
-
-app.get('/signup_successful', (req, res) => {
-    res.render('signup_successful');
 });
 
 
