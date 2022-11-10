@@ -12,7 +12,7 @@ const authRoute = require('./routes/auth');
 const postRoute = require('./routes/post');
 
 const HOST = 'localhost'
-const PORT = 8000;
+const PORT = 10000;
 const app = express();
 
 
@@ -35,19 +35,19 @@ app.set('view engine', 'ejs');
 
 // renders the home page
 app.get('/', (req, res) => {
-    res.render('home');
+    res.send(200).render('home');
 });
 
 app.get('/signup', (req, res) => {
-res.render('signup');
+res.send(200).render('signup');
 });
 
 app.get('/login', (req, res) => {
-    res.render('signup');
+    res.send(200).render('signup');
 });
 
 app.get('/create', (req, res) => {
-    res.render('create');
+    res.send(200).render('create');
 });
 
 
