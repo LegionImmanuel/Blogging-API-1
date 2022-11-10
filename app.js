@@ -12,7 +12,7 @@ const authRoute = require('./routes/auth');
 const postRoute = require('./routes/post');
 
 const HOST = 'localhost'
-const PORT = 9017;
+const PORT = 8000;
 const app = express();
 
 
