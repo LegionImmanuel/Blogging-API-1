@@ -108,11 +108,12 @@ This API is built using Node.JS, Express framework, Mongoose, JWT using MongoDB 
 <br>
 
 ### Base Url
-https://rose-wicked-camel.cyclic.app/
+https://rose-wicked-camel.cyclic.app/ ❌ <br>
+https://blogging-api-node.onrender.com ✅
 
 ### THE REST API
 
-Create a .env file to store your MongoDB database credentials and environment variables
+Create a .env file to store your MongoDB database credentials and environment variables. Kindly refer to the .gitignore file
 
 ```
 MONGODB_URI = mongodb+srv://<username>:<password>@cluster0.6m5cz.mongodb.net/Recipes?retryWrites=true&w=majority
@@ -137,6 +138,12 @@ git clone https://github.com/LegionImmanuel/Blogging-API-1.git
 ```
 node app.js or nodemon app.js
 ```
+
+### TESTING TOOL
+Use
+1. Postman or
+2. Thunderclient for testing
+
 
 ### THE ENDPOINTS
 -------
