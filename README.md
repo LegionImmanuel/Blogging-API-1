@@ -108,7 +108,6 @@ This API is built using Node.JS, Express framework, Mongoose, JWT using MongoDB 
 <br>
 
 ### Base Url
-https://rose-wicked-camel.cyclic.app/ ❌ <br>
 https://blogging-api-node.onrender.com ✅
 
 ### THE REST API
